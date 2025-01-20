@@ -1,0 +1,5 @@
+from PIL import Image
+
+# Crear una imagen de 32x32 píxeles de color azul
+img = Image.new('RGB', (32, 32), color='blue')
+img.save('backend/FastAPI/static/favicon.ico')
