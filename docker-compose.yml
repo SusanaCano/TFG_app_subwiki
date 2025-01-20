@@ -1,0 +1,20 @@
+
+services:
+  nextjs:
+    build:
+      context: .              # Usa la raíz del proyecto para buscar el Dockerfile
+      dockerfile: Dockerfile  # Especifica el archivo Dockerfile para Next.js
+    ports:
+      - "3000:3000"           # Mapea el puerto 3000 local al puerto 3000 del contenedor
+    volumes:
+      - ./app:/app            # Sincroniza la carpeta local 'app' con la del contenedor
+      - node_modules: /app/node_modules # administrado por docker. Restringe el acceso a yarn local
+      - build: /app/.next # administrado por docker. Restringe el acceso a yarn local
+    environment:
+      - MONGO_URI=${MONGO_URI} # Lee las variables de entorno desde .env
+    networks:
+      - bio-net               # Define una red para conectar servicios
+
+networks:
+  bio-net:
+    driver: bridge

@@ -1,0 +1,35 @@
+.searchBar {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .searchBar input {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+  }
+  
+  .searchBar button {
+    padding: 10px 20px;
+    background-color: #0070f3;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .searchBar button:hover {
+    background-color: #005bb5;
+  }
+
+  .shape{
+    /*
+    DIBUJA UN TRIANGULO EN NEGRO
+    */
+    height: 0;
+    width: 0;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-bottom: 30px solid black;
+}
+  

@@ -1,7 +1,25 @@
-import type { NextConfig } from "next";
+//import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
+//const nextConfig: NextConfig = {
   /* config options here */
+ // reactStrictMode: true
+//};
+
+//export default nextConfig;]
+
+// frontend/next.config.js
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'http://localhost:8000/:path*', // Redirige /api a FastAPI
+      },
+    ];
+  },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
