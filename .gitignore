@@ -1,0 +1,39 @@
+# Node.js (Frontend)
+frontend/node_modules
+frontend/.next
+frontend/.env.local
+frontend/.npm
+frontend/.yarn
+frontend/package-lock.json
+frontend/src/app/pages/
+
+
+# Python (Backend)
+backend/__pycache__
+backend/.env
+backend/.venv
+backend/venv
+backend/*.pyc
+backend/.mypy_cache
+backend/.pytest_cache
+
+# Docker
+db/*
+!db/.gitkeep
+docker-compose.override.yml
+
+# General
+.DS_Store
+*.log
+*.swp
+.vscode/
+.idea/
+*.bak
+
+# mongoDB
+
+mongoDB/.env
+
+# Archivos de logs de build
+build_log_no_slint_config.txt
+build_log.txt

@@ -1,0 +1,28 @@
+# backend/.dockerignore
+
+# Git
+.git
+.gitignore
+
+# Ignorar cachés de Python
+__pycache__/
+*.pyc
+*.pyo
+.mypy_cache/
+.pytest_cache/
+
+# Ignorar entornos virtuales locales
+.venv/
+venv/
+
+# Ignorar archivos de configuración sensibles
+.env
+.env.*
+
+# Ignorar archivos de logs y bases de datos locales
+*.log
+*.sqlite3
+pytest.ini
+
+# Documentación
+README.md

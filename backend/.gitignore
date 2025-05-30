@@ -1,0 +1,25 @@
+# backend/.gitignore
+
+env/
+.env.*
+
+# Archivos compilados y cache de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+pytest.ini
+
+# consultas pruebas
+consulta3
+consulta1
+consulta2
+consulta5

@@ -1,0 +1,66 @@
+--progress is a global compose flag, better use `docker compose --progress xx build ...
+Compose can now delegate builds to bake for better performance.
+ To do so, set COMPOSE_BAKE=true.
+#0 building with "default" instance using docker driver
+
+#1 [frontend internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.06kB done
+#1 DONE 0.1s
+
+#2 [frontend internal] load metadata for docker.io/library/node:20-slim
+#2 ...
+
+#3 [frontend auth] library/node:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#2 [frontend internal] load metadata for docker.io/library/node:20-slim
+#2 DONE 2.8s
+
+#4 [frontend internal] load .dockerignore
+#4 transferring context: 322B done
+#4 DONE 0.0s
+
+#5 [frontend  1/10] FROM docker.io/library/node:20-slim@sha256:cb4abfbba7dfaa78e21ddf2a72a592e5f9ed36ccf98bdc8ad3ff945673d288c2
+#5 DONE 0.0s
+
+#6 [frontend  2/10] WORKDIR /app
+#6 CACHED
+
+#7 [frontend internal] load build context
+#7 transferring context: 8.66kB 0.1s done
+#7 DONE 0.2s
+
+#8 [frontend  3/10] COPY package.json ./
+#8 DONE 0.2s
+
+#9 [frontend  4/10] COPY package-lock.json ./
+#9 DONE 0.2s
+
+#10 [frontend  5/10] RUN npm ci
+#10 132.1 
+#10 132.1 added 443 packages, and audited 444 packages in 2m
+#10 132.1 
+#10 132.1 160 packages are looking for funding
+#10 132.1   run `npm fund` for details
+#10 132.1 
+#10 132.1 found 0 vulnerabilities
+#10 132.1 npm notice
+#10 132.1 npm notice New major version of npm available! 10.8.2 -> 11.4.1
+#10 132.1 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.4.1
+#10 132.1 npm notice To update run: npm install -g npm@11.4.1
+#10 132.1 npm notice
+#10 DONE 132.9s
+
+#11 [frontend  6/10] COPY . .
+#11 DONE 0.4s
+
+#12 [frontend  7/10] RUN echo ">>> Contenido de /app/eslint.config.mjs en el contenedor:" &&     cat /app/eslint.config.mjs &&     echo ">>> Fin del contenido de eslint.config.mjs"
+#12 1.349 >>> Contenido de /app/eslint.config.mjs en el contenedor:
+#12 1.352 cat: /app/eslint.config.mjs: No such file or directory
+#12 ERROR: process "/bin/sh -c echo \">>> Contenido de /app/eslint.config.mjs en el contenedor:\" &&     cat /app/eslint.config.mjs &&     echo \">>> Fin del contenido de eslint.config.mjs\"" did not complete successfully: exit code: 1
+------
+ > [frontend  7/10] RUN echo ">>> Contenido de /app/eslint.config.mjs en el contenedor:" &&     cat /app/eslint.config.mjs &&     echo ">>> Fin del contenido de eslint.config.mjs":
+1.349 >>> Contenido de /app/eslint.config.mjs en el contenedor:
+1.352 cat: /app/eslint.config.mjs: No such file or directory
+------
+failed to solve: process "/bin/sh -c echo \">>> Contenido de /app/eslint.config.mjs en el contenedor:\" &&     cat /app/eslint.config.mjs &&     echo \">>> Fin del contenido de eslint.config.mjs\"" did not complete successfully: exit code: 1
