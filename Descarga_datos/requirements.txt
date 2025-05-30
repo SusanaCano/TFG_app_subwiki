@@ -1,0 +1,7 @@
+requests # Para manejar peticiones HTTP
+python-dotenv # Para trabajar con variables de entorno
+pymongo # Cliente para MongoDB
+# Para validación de datos y modelos (opcional pero recomendable si usas Pydantic en descargas o tests)
+pydantic
+pytest # Para realizar tests unitarios
+mongomock

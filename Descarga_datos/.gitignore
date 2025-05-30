@@ -1,0 +1,14 @@
+# Archivos de entorno 
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Carpetas de descargas
+descargas_kegg_json/*
+descargas_kegg_rutas_graficas_json/*
+descargas_rutas_kegg_json/*
+descargas_Uniprot_json/*
