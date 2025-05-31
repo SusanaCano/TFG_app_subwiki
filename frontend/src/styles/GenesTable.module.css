@@ -1,0 +1,49 @@
+/* src/ app/ styles/ GenesTable.module.css */
+
+/* Estilos para la table donde se muestras los datos de genes */
+
+
+/* Estilos generales de la tabla */
+.table {
+    width: 100%;
+    border-collapse: collapse; /* Une los bordes de las celdas */
+    margin-top: 10px;
+  }
+  
+  /* Estilos para encabezados */
+  .th {
+    background-color: #f4f4f4; /* Color de fondo gris claro */
+    font-weight: bold;
+    border: 2px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  /* Estilos para celdas */
+  .td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  /* Bordes más visibles */
+  .td, .th {
+    border: 2px solid #000;
+  }
+  
+  /* Alternar colores en filas para mejor lectura */
+  .tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  /* Ajuste de ancho y formato para la celda de secuencia */
+  
+  .sequenceCell {
+    max-width: 400px; /* Ajusta el ancho de la celda */
+    white-space: pre-wrap; /* Permite saltos de línea */
+    word-break: break-word; /* Rompe palabras largas */
+    font-family: monospace; /* Letra monoespaciada para mejor lectura */
+ }
+
+
+  

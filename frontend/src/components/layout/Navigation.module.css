@@ -1,0 +1,65 @@
+/* src/components/layout/Navigation.module.css */
+
+/*
+.header {
+    border: 1px solid #f0f0f0;
+    border-radius: 4px;
+    padding: 4px;
+}
+*/
+
+/* Clase para el contenedor <nav> */
+.container { /* Antes .header, pero <nav> es más semántico */
+  /* border: 1px solid #f0f0f0; // Considera usar bordes de Tailwind si es preferible */
+  /* border-radius: 4px; */
+  padding: 0.5rem 1rem; /* Usar rem o clases de Tailwind como p-4 */
+  background-color: #f8f9fa; /* Un color de fondo sutil, o transparente si prefieres */
+  display: flex; /* Para alinear la lista de navegación, si es horizontal */
+  justify-content: center; /* O 'flex-start', 'space-between', etc. */
+}
+
+/* Clase para la lista <ul> */
+.navigationList { /* Antes .navigation */
+  display: flex; /* Para enlaces horizontales */
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 1rem; /* Espacio entre elementos <li>, Tailwind: gap-4 */
+}
+
+
+/* Estilo para los elementos <li>, aunque a menudo los estilos se aplican directamente a <a> */
+.navigationItem { /* Nueva clase, opcional */
+  /* display: block; // No necesario si .navigationList es flex y quieres horizontal */
+  /* margin-bottom: 10px; // No necesario con gap en <ul> */
+}
+
+/* Estilo para los enlaces <a> */
+.link { /* Nueva clase, más específica que solo 'a' dentro de .navigation */
+  text-decoration: none;
+  color: #333; /* O var(--foreground) */
+  padding: 0.5rem 0.75rem; /* Tailwind: px-3 py-2 */
+  display: block; /* Asegura que toda el área sea clicable */
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  border-radius: 0.25rem; /* Tailwind: rounded-md */
+}
+
+.link:hover {
+  background-color: #4CAF50; /* Verde - considera usar paleta de Tailwind */
+  /* color: #fff; */ /* O un color claro de tu paleta var(--background-hover-text) */
+  color: white; /* Manteniendo tu elección */
+  /* text-decoration: underline; // Ya lo tenías, puedes añadirlo si quieres */
+}
+
+/* Estilo para el enlace deshabilitado */
+.disabledLink {
+  color: grey; /* O un color más suave de tu paleta */
+  cursor: not-allowed;
+  padding: 0.5rem 0.75rem;
+  display: block;
+  border-radius: 0.25rem;
+}
+
+/* Si tenías dos definiciones para .navigation, unifícalas. La segunda parece más completa. */
+/* La primera definición de .navigation tenía display:flex y gap:px (px no es válido). */
+/* He combinado lo mejor de ambas. */
