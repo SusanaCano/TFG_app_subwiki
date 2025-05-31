@@ -1,0 +1,56 @@
+// src/styles/SearchBar.module.css 
+
+.searchBarContainer { /* Añadida una clase contenedora si es necesaria */
+  display: flex;
+  gap: 0.5rem; /* Tailwind: gap-2 */
+  align-items: center; /* Para alinear el botón con el input verticalmente */
+  /* width: 100%; */ /* Opcional, depende de dónde lo uses */
+  /* max-width: 500px; */ /* Opcional, para limitar el ancho */
+}
+
+.searchInput { /* Antes .searchBar input */
+  flex: 1; /* Para que ocupe el espacio disponible */
+  padding: 0.75rem 1rem; /* Tailwind: px-4 py-3 */
+  font-size: 1rem; /* Tailwind: text-base o text-lg */
+  border: 1px solid #ccc; /* Tailwind: border border-gray-300 */
+  border-radius: 0.25rem; /* Tailwind: rounded-md */
+  /* width: 100%; // Redundante si flex: 1 y el contenedor tiene ancho definido */
+}
+
+.searchButton { /* Antes .searchBar button */
+  padding: 0.75rem 1.25rem; /* Tailwind: px-5 py-3 */
+  background-color: #0070f3; /* Azul Vercel - considera paleta Tailwind */
+  color: white;
+  border: none;
+  border-radius: 0.25rem; /* Tailwind: rounded-md */
+  cursor: pointer;
+  font-size: 1rem; /* Tailwind: text-base */
+  transition: background-color 0.2s ease-in-out;
+}
+
+.searchButton:hover {
+  background-color: #005bb5;
+}
+
+.shape { /* Este estilo es para un triángulo, no parece directamente relacionado con SearchBar */
+  /* Si es parte de SearchBar, está bien. Si no, debería estar en otro sitio o ser más específico. */
+  height: 0;
+  width: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-bottom: 30px solid black; /* O var(--foreground) */
+}
+
+ // .shape{
+    /*
+    DIBUJA UN TRIANGULO EN NEGRO
+    */
+    
+  /*
+    height: 0;
+    width: 0;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-bottom: 30px solid black;
+}
+*/

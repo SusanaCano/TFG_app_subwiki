@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Asegúrate de que el contenedor ocupe el 100% de la altura */
+html, body, #__next {
+  height: 100%;
+  margin: 0;
+}
+
+main {
+  flex: 1; /* Esto asegura que el contenido principal ocupe el espacio disponible */
+  overflow: auto; /* Permite que el contenido se desplace si es necesario */
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #18181b;
+    --foreground: #e4e4e7;
+  }
+}
+
+body {
+  @apply font-sans;
+  /*
+  //color: var(--foreground);
+  //background: var(--background);
+  //font-family: Arial, Helvetica, sans-serif;
+  */
+}
+
+/*
+footer {
+  background-color: #333;
+  color: white;
+  padding: 10px;
+  text-align: center;
+}
+*/
