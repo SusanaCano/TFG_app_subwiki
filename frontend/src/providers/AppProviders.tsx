@@ -21,7 +21,7 @@
 
 'use client';
 
-import { SearchQueryProvider } from '@/contexts/SearchQueryContext';
+import { SearchQueryProvider } from '@/features/uniprot/context/SearchQueryContext';
 import { GenProvider } from '@/features/kegg/context/GenContext';
 import { PathwayProvider } from '@/features/kegg/context/PathwayContext';
 

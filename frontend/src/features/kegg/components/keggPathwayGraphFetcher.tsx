@@ -2,20 +2,45 @@
 
 /**
  * @file KeggPathwayGraphFetcher.tsx
- * @description Obtiene el pathwayId del PathwayContext, busca los datos del gráfico
- * para ese pathway y los pasa a KeggPathwayGraphDisplay.
-*/
+ * @description  Componente de React (Next.js 'use client') encargado de obtener los datos
+ *              detallados de un grafo de ruta metabólica de KEGG y pasarlos al componente
+ *              `KeggPathwayGraphDisplay` para su renderizado.
+ *
+ * Funcionalidad:
+ * - Consume `pathwayId` y `pathwayName` del `PathwayContext` mediante el hook `usePathway`.
+ * - Gestiona estados internos para `graphData` (datos del grafo), `isLoading` (estado de carga),
+ *   `error` (mensajes de error) y `currentFetchedPathwayId` (para evitar recargas innecesarias).
+ * - Cuando `pathwayId` cambia (o al montar si hay un `pathwayId` inicial):
+ *   - Si no hay `pathwayId`, limpia los datos y el estado de error.
+ *   - Si el `pathwayId` ya ha sido cargado o está en proceso, evita una nueva petición.
+ *   - Realiza una petición `fetch` al endpoint `/api/kegg/pathway_graph/[pathwayId]` para
+ *     obtener los datos del grafo (`KeggPathwayGraphData`). Esta petición tiene un
+ *     ligero "debounce" (100ms).
+ *   - Valida la estructura de la respuesta de la API.
+ *   - Actualiza `graphData` con los resultados o `error` si la petición falla.
+ * - Lógica de Renderizado:
+ *   - Muestra un mensaje inicial si no se ha seleccionado ninguna ruta.
+ *   - Muestra un indicador de carga ("Cargando gráfico para...") mientras se obtienen los datos.
+ *   - Muestra un `ErrorMessage` si ocurre un error durante la obtención de datos.
+ *   - Muestra un mensaje si no se pudo cargar la representación gráfica para una ruta específica.
+ *   - Si los datos del grafo (`graphData`) se obtienen correctamente y hay un `pathwayId`,
+ *     renderiza el componente `KeggPathwayGraphDisplay`, pasándole `graphData`.
+ *
+ * Este componente actúa como un controlador que maneja la lógica de obtención de datos y
+ * los estados asociados, delegando la visualización del grafo al componente
+ * `KeggPathwayGraphDisplay`.
+ */
 
 'use client';
 
 import React, { useEffect, useState } from 'react';
 import { usePathway } from '../context/PathwayContext';
-import KeggPathwayGraphDisplay from './keggPathwayGraphDisplay'; // Tu componente que dibuja
+import KeggPathwayGraphDisplay from './keggPathwayGraphDisplay'; 
 import { KeggPathwayGraphData } from '../types/keggTypes';
 import ErrorMessage from '@/components/ErrorMessage';
 
 const KeggPathwayGraphFetcher: React.FC = () => {
-    const { pathwayId, pathwayName } = usePathway(); // Usa el contexto
+    const { pathwayId, pathwayName } = usePathway(); 
     const [graphData, setGraphData] = useState<KeggPathwayGraphData | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -38,7 +63,7 @@ const KeggPathwayGraphFetcher: React.FC = () => {
 
         // Si el pathwayId es nuevo, limpiar datos/errores anteriores
       if (pathwayId !== currentFetchedPathwayId) {
-        setGraphData(null); // Limpiar datos de un pathway anterior
+        setGraphData(null); 
         setError(null);
       }
         
@@ -49,9 +74,9 @@ const KeggPathwayGraphFetcher: React.FC = () => {
           
         
           try {
-            // Esta API debería devolver nodos, ejes, etc.
+            
             const response = await fetch(`/api/kegg/pathway_graph/${encodeURIComponent(pathwayId)}`);
-            //const response = await fetch(`/api/kegg/pathway/graph/${encodeURIComponent(pathwayId)}`);
+            
 
             if (!response.ok) {
               let errorMessage = `Error ${response.status}`;
@@ -64,20 +89,9 @@ const KeggPathwayGraphFetcher: React.FC = () => {
         
             const result: KeggPathwayGraphData = await response.json();
             console.log("[KeggPathwayGraphFetcher] Pathway graph data received:", result);
-            
-            /** 
-            if (!result || !result.nodes || !result.edges || !result.pathwayId) {
-              console.error("[KeggPathwayGraphFetcher] Invalid data structure for pathway graph:", result);
-            //   throw new Error("Respuesta de API para gráfico de pathway no válida.");
-              setGraphData(null);
-              setError(`Datos del gráfico para ${pathwayId} inválidos o vacíos.`);
-            } else {
-                setGraphData(result);
-                setError(null);
-            }
-            */
+          
 
-                        // VALIDACIÓN USANDO LAS CLAVES CORRECTAS DEL TIPO ACTUALIZADO
+             // VALIDACIÓN USANDO LAS CLAVES CORRECTAS DEL TIPO ACTUALIZADO
             if (!result || !result._id || !Array.isArray(result.nodes) || !Array.isArray(result.edges)) {
               console.error("[KeggPathwayGraphFetcher] Invalid data structure. Missing _id, or nodes/edges are not arrays:", result);
               setGraphData(null);
@@ -101,7 +115,7 @@ const KeggPathwayGraphFetcher: React.FC = () => {
           }
         };
         
-        const timer = setTimeout(fetchData, 100); // Pequeño debounce
+        const timer = setTimeout(fetchData, 100); // debounce
         return () => clearTimeout(timer);
 
         }, [pathwayId, currentFetchedPathwayId, graphData, isLoading]);
@@ -128,7 +142,7 @@ const KeggPathwayGraphFetcher: React.FC = () => {
             
                 <div className="mt-6 p-4 border rounded-md shadow">
                     <h4 className="text-md font-semibold mb-3">
-                      {/*Gráfico de la Ruta: {graphData.pathwayName || pathwayName || graphData.pathwayId}*/}
+                     
                       Gráfico de la Ruta: {graphData.pathwayName || pathwayName || graphData._id}
                     </h4>
 
@@ -137,7 +151,7 @@ const KeggPathwayGraphFetcher: React.FC = () => {
             );
         }
     
-        return null; // O un placeholder si no hay pathwayId pero sí un currentFetched (se deseleccionó)
+        return null; 
     };
 
     export default KeggPathwayGraphFetcher;

@@ -1,4 +1,29 @@
 // src/app/features/kegg/components/keggGraph/keggGraphContainer.tsx
+
+/**
+ * @file keggGraphContainer.tsx
+ * @description Componente contenedor de React (Next.js 'use client') para `KeggGraph`.
+ *              Es responsable de obtener los datos de las rutas metabólicas de KEGG
+ *              asociadas a un `genId` específico y luego pasar estos datos al
+ *              componente de presentación `KeggGraph`.
+ *
+ * Props:
+ * - `genId` (string): El identificador del gen para el cual se deben obtener
+ *                     los datos de las rutas metabólicas.
+ *
+ * Funcionalidad:
+ * - Utiliza `useEffect` para iniciar la carga de datos cuando el componente
+ *   se monta o cuando la prop `genId` cambia.
+ * - Realiza una petición `fetch` al endpoint `/api/kegg/pathways_for_gene/[genId]`
+ *   para obtener los datos.
+ * - Gestiona estados internos para `data` (de tipo `KeggData | null`) y `loading` (booleano).
+ * - Muestra un mensaje "Cargando datos..." durante la carga.
+ * - Muestra un mensaje "No se encontraron datos." si no se obtienen datos después de la carga
+ *   o si la petición no fue exitosa y `data` permanece `null`.
+ * - Si la carga es exitosa y se reciben datos, renderiza el componente `KeggGraph`,
+ *   pasándole los `data` (de tipo `KeggData`) obtenidos.
+ */
+
 'use client';
 
 import React, { useEffect, useState } from "react";
@@ -35,79 +60,6 @@ export function KeggGraphContainer({ genId }: Props) {
 
   return <KeggGraph data={data} />;
 }
-/**
-interface KeggGraphContainerProps {
-  genId: string;
-}
 
-const KeggGraphContainer: React.FC<KeggGraphContainerProps> = ({ genId }) => {
-  const [data, setData] = useState<KeggData | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        // Cambio: La ruta ahora usa el campo 'entry' en lugar de 'genId'
-        const response = await fetch(`/api/kegg/${genId}`);  // El 'genId' se pasa en la URL
-        
-        if (!response.ok) {
-          const errorText = await response.text(); // Obtén el texto de error si es posible
-          //throw new Error("Ruta metabólica no encontrada");
-          throw new Error(`Error en la API: ${errorText}`);
-        }
-
-        const result: KeggData = await response.json();
-        console.log("Datos recibidos:", result);  
-        setData(result);
-      }catch (error) {
-        setError(error instanceof Error ? error.message : "Error desconocido");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (genId) { 
-      fetchData();
-    }
-  }, [genId]);
-
-  if (loading) {
-    return <p>Cargando datos...</p>;
-  }
-
-    // Si hay un error, mostramos el mensaje de error
-    if (error) {
-      return <p>Error: {error}</p>;
-    }
-    
-  return (
-    <div>
-      {data ? <KeggGraph data={data} /> : <p>Cargando datos...</p>}
-    </div>
-  );
-};
-
-export default KeggGraphContainer;
- */
-
-/*
-import React from 'react';
-import { GraphData } from './types';  // Asumimos que tienes tipos definidos en types.ts
-
-interface Props {
-  data: GraphData;
-}
-
-const KeggGraphContainer = ({ data }: Props) => {
-  // Usa la variable 'data' de alguna manera, por ejemplo:
-  return (
-    <div>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
-    </div>
-  );
-};
-*/
 export default KeggGraphContainer;

@@ -57,3 +57,5 @@ next-env.d.ts
 
 
 genes?query=test
+
+src/app/metabolic_pathways/

@@ -1,5 +1,24 @@
 // src/features/kegg/components/keggGraph/keggGraph.tsx
 
+/**
+ * @file keggGraph.tsx
+ * @description Componente de React (`KeggGraph`) encargado de mostrar una vista previa
+ *              o un enlace a una ruta metabólica de KEGG para un gen específico.
+ *
+ * Props:
+ * - `data` (KeggData): Un objeto que contiene la información necesaria, principalmente
+ *                      `genId`, para identificar la ruta metabólica.
+ *
+ * Funcionalidad:
+ * - Muestra un encabezado indicando la ruta metabólica del `genId` proporcionado.
+ * - Renderiza un enlace (usando `next/link`) que dirige al usuario a una página
+ *   dedicada para visualizar la ruta metabólica completa de ese `genId`.
+ *   (`/app/api/kegg/[genId]`).
+ *
+ * Este componente sirve como un punto de entrada para la visualización
+ * más detallada de la ruta metabólica.
+ */
+
 import React from "react";
 import { KeggData } from "./types"; 
 import Link from 'next/link';
@@ -22,51 +41,3 @@ const KeggGraph: React.FC<KeggGraphProps> = ({ data }) => {
 
 export default KeggGraph;
 
-
-/*
-'use client'
-
-import CytoscapeComponent from 'react-cytoscapejs';
-// import { useEffect, useState } from 'react';
-
-import { KeggGraphProps } from './types'; // Asegúrate de importar el tipo correctamente
-
-// Aquí KeggGraph recibe los props definidos en KeggGraphProps
-export default function KeggGraph({ nodes, edges }: KeggGraphProps) {
-  const elements = [
-    ...nodes.map((node) => ({ data: { id: node.id, label: node.label } })),
-    ...edges.map((edge) => ({ data: { source: edge.source, target: edge.target } })),
-  ];
-
-  return (
-    <div style={{ height: '600px', width: '100%' }}>
-      <CytoscapeComponent
-        elements={elements}
-        style={{ width: '100%', height: '100%' }}
-        layout={{ name: 'cose' }}
-        stylesheet={[
-          {
-            selector: 'node',
-            style: {
-              label: 'data(label)',
-              'background-color': '#0074D9',
-              color: '#fff',
-              'text-valign': 'center',
-              'text-halign': 'center',
-            },
-          },
-          {
-            selector: 'edge',
-            style: {
-              'line-color': '#aaa',
-              'target-arrow-color': '#aaa',
-              'target-arrow-shape': 'triangle',
-              'curve-style': 'bezier',
-            },
-          },
-        ]}
-      />
-    </div>
-  );
-}
-*/

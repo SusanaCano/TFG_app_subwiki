@@ -4,15 +4,40 @@
 
 /**
  * @file KeggPathwayGraphDisplay.tsx
- * @description Muestra el gráfico de una ruta metabólica de KEGG específica.
- * Puede usar Cytoscape.js o mostrar una imagen.
-*/
+ * @description  Componente de React (Next.js 'use client') que renderiza la visualización
+ *              de una ruta metabólica específica de KEGG. Puede mostrar un grafo interactivo
+ *              usando Cytoscape.js si se proporcionan datos de nodos y aristas, y/o una imagen
+ *              estática de la ruta.
+ *
+ * Props:
+ * - `graphData` (KeggPathwayGraphData | null | undefined): Un objeto que contiene los datos
+ *   de la ruta metabólica. Este objeto puede incluir:
+ *     - `nodes` y `edges`: Para renderizar el grafo con Cytoscape.js.
+ *     - `image_url` o `pathwayImageUrl`: URL de una imagen estática de la ruta.
+ *     - `name`, `pathwayName`, `_id`: Para mostrar un nombre de la ruta.
+ *
+ * Lógica de Renderizado:
+ * 1. Si `graphData` es nulo o indefinido: Muestra un mensaje "Esperando datos del pathway...".
+ * 2. Si `graphData` contiene `image_url` (o `pathwayImageUrl`) y NO contiene `nodes` (o están vacíos):
+ *    Renderiza únicamente la imagen estática usando `<img>`.
+ * 3. Si `graphData` contiene `nodes` (y opcionalmente `edges`):
+ *    - Renderiza un grafo interactivo utilizando `CytoscapeComponent`.
+ *    - Si `graphData` también contiene `image_url` (o `pathwayImageUrl`), esta imagen se
+ *      muestra encima del grafo interactivo como referencia, utilizando `next/image`.
+ * 4. Si `graphData` existe pero no se cumplen las condiciones anteriores para mostrar una imagen
+ *    o un grafo (ej. no hay `nodes` ni `image_url` válidos): Muestra un mensaje
+ *    "No hay datos de gráfico para mostrar...".
+ *
+ * Características Adicionales:
+ * - Determina un `pathwayDisplayName` a partir de las propiedades de `graphData`.
+ * - Aplica estilos personalizados a los nodos y aristas del grafo de Cytoscape.js.
+ */
 
 'use client';
 import React from 'react';
 import Image from 'next/image';
 import { KeggPathwayGraphData } from '../types/keggTypes';
-import CytoscapeComponent from 'react-cytoscapejs'; // Si usas Cytoscape
+import CytoscapeComponent from 'react-cytoscapejs'; 
 
 interface KeggPathwayGraphDisplayProps {
     graphData: KeggPathwayGraphData | null | undefined;
@@ -24,14 +49,12 @@ const KeggPathwayGraphDisplay: React.FC<KeggPathwayGraphDisplayProps> = ({ graph
         return <p className="p-4 text-gray-500 text-center">Esperando datos del pathway...</p>;
     }
 
-    // Ahora sabemos que graphData existe.
     const pathwayDisplayName = graphData.name || graphData.pathwayName || graphData._id || 'Pathway Desconocido';
     
     const imageUrlToDisplay = graphData.image_url || graphData.pathwayImageUrl;
 
     const hasCytoscapeData = graphData.nodes && graphData.nodes.length > 0;
 
-        // Usar image_url y name (o _id si name no existe)
     if (graphData.image_url && (!graphData.nodes || graphData.nodes.length === 0)) {
         return (
             <div>
@@ -47,7 +70,7 @@ const KeggPathwayGraphDisplay: React.FC<KeggPathwayGraphDisplayProps> = ({ graph
     
     if (graphData.pathwayImageUrl && (!graphData.nodes || graphData.nodes.length === 0)) {
     
-        // Mostrar imagen si está disponible y no hay datos de nodos/ejes detallados
+        // Mostrar imagen si está disponible 
         return (
             <div>
                 <img src={graphData.pathwayImageUrl} alt={`KEGG Pathway: ${graphData.pathwayName}`}
@@ -119,9 +142,9 @@ className="w-full h-auto border rounded"/>
                     <Image
                         src={imageUrlToDisplay}
                         alt={`Imagen de KEGG para el pathway ${pathwayDisplayName}`}
-                        width={800} // Ancho base para cálculo de aspect ratio
-                        height={600} // Alto base para cálculo de aspect ratio
-                        layout="responsive" // Hace la imagen responsiva al contenedor
+                        width={800} 
+                        height={600} 
+                        layout="responsive" 
                     />
                 </div>
                 <p className="text-xs text-gray-500 mt-1 text-center">
