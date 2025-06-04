@@ -10,12 +10,12 @@ from app.routers.router_kegg_graph import kegg_graph_router
 from fastapi_pagination import Page, add_pagination, paginate
 import os
 from motor.motor_asyncio import AsyncIOMotorClient
-from app.models.models_page_consultas import Page
-from typing import List, Dict
+#from app.models.models_page_consultas import Page
+#from typing import List, Dict
 from pydantic import BaseModel
-#from app.consultas.consulta2 import obtener_resultados
+from app.consultas.consultaUniprot import obtener_resultados
 from app.utils.transformador import transformar_documento
-from app.consultas.consulta4 import obtener_resultados
+#from app.consultas.consulta4 import obtener_resultados # Esta funciona pero le faltan algunos campos
 from app.models.models_data_mongo import QueryResponse  
 from app.services.kegg_service import obtener_ruta_metabolica
 
@@ -23,7 +23,7 @@ load_dotenv()  # Cargar variables de entorno desde .env
 
 app = FastAPI()
 
-app.include_router(uniprot_router, prefix="/api", tags=["proteins"])
+app.include_router(uniprot_router, prefix="/api", tags=["Uniprot"])
 app.include_router(kegg_router, prefix="/api/kegg")
 app.include_router(kegg_graph_router, prefix="/api/kegg")
 
@@ -157,7 +157,7 @@ async def verificar_estructura():
     documentos = [transformar_documento(doc) for doc in documentos]
     return documentos
 
-
+'''
 # @app.get("/buscar", response_model=List[QueryResponse])
 @app.get("/buscar", response_model=Dict[str, List[QueryResponse]])
 async def buscar(query: str):
@@ -166,6 +166,7 @@ async def buscar(query: str):
     #if resultados.count() == 0:
      #   return {"message": "No se encontraron resultados para la consulta"}, 404
     return {"result": list(resultados)}
+'''
 
 class GenIdRequest(BaseModel):
     entry: str
@@ -207,5 +208,5 @@ async def get_pathway_graph_details_mock(pathway_id: str):
     }
     
 '''  
-    # Para obtener datos para la grafica de rutas metabolicas
+   
  

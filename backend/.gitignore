@@ -19,7 +19,9 @@ __pycache__/
 pytest.ini
 
 # consultas pruebas
-consulta3
-consulta1
-consulta2
-consulta5
+app/consultas/consulta3.py
+app/consultas/consulta1.py
+app/consultas/consulta2.py
+app/consultas/consulta5.py
+app/consultas/consulta4.py
+app/consultas/consultaUniprot.py

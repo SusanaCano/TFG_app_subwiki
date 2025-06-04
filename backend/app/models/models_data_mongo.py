@@ -39,7 +39,8 @@ class Sequence(BaseModel):
     md5: Optional[str] = None
     
 class Gene(BaseModel):
-    geneName: str
+    #geneName: str
+    geneName: Optional[str] = None
     orderedLocusNames: str
 
 class Protein(BaseModel):
@@ -50,21 +51,9 @@ class Protein(BaseModel):
 
 class QueryResponse(BaseModel):
     primaryAccession: Optional[str]= None
-    proteinDescription: Optional[str]
+    proteinDescription: Optional[str] = None
     genes: List[Gene]
     sequence: Sequence
     
 
     
-'''
-ANTES EN EL MAIN
-class Gene(BaseModel):
-    gene: str
-    description: str
-
-class GeneResponse(BaseModel):
-    resultados: List[Gene]
-    total: int
-    page: int
-    size: int
-'''
