@@ -21,7 +21,7 @@
 'use client'
 
 import { useState } from 'react';
-import { useSearchQuery } from '@/contexts/SearchQueryContext'; 
+import { useSearchQuery } from '@/features/uniprot/context/SearchQueryContext'; 
 
 
 const SearchBar = () => {

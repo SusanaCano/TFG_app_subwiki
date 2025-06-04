@@ -2,15 +2,37 @@
 
 /**
  * @file KeggPathwayListDisplay.tsx
- * @description Muestra una lista de rutas KEGG. Al hacer clic en una,
- * actualiza el PathwayContext para disparar la visualización del gráfico.
-*/
+ * @description Componente de React (Next.js 'use client') que renderiza una lista
+ *              interactiva de rutas metabólicas de KEGG (`KeggPathwayEntry`).
+ *              Permite al usuario seleccionar una ruta de la lista.
+ *
+ * Props:
+ * - `pathways` (KeggPathwayEntry[]): Un array de objetos `KeggPathwayEntry`,
+ *   cada uno representando una ruta metabólica con su ID y nombre.
+ *
+ * Funcionalidad:
+ * - Muestra un mensaje "No hay rutas para mostrar" si el array `pathways`
+ *   está vacío o no se proporciona.
+ * - Renderiza cada ruta metabólica como un botón clickeable.
+ * - Al hacer clic en un botón de ruta:
+ *   - Llama a `setPathwayId` del `PathwayContext` (obtenido mediante `usePathway`)
+ *     para actualizar el ID de la ruta seleccionada globalmente.
+ *   - Llama a `setPathwayName` del `PathwayContext` (si está disponible) para
+ *     actualizar el nombre de la ruta seleccionada globalmente.
+ * - Estiliza visualmente la ruta actualmente seleccionada (basándose en `selectedPathwayId`
+ *   del contexto) para diferenciarla de las demás.
+ * - Muestra el nombre y el ID de cada ruta.
+ *
+ * Este componente es clave para la interacción del usuario, permitiéndole elegir qué
+ * ruta metabólica desea visualizar en detalle en otros componentes que
+ * consumen el `PathwayContext`.
+ */
 
 'use client';
 
 import React from 'react';
 import { KeggPathwayEntry } from '../types/keggTypes';
-import { usePathway } from '../context/PathwayContext'; // Importa el hook del PathwayContext
+import { usePathway } from '../context/PathwayContext'; // Importa el hook 
 
 interface KeggPathwayListDisplayProps {
     pathways: KeggPathwayEntry[];
@@ -23,7 +45,7 @@ const KeggPathwayListDisplay: React.FC<KeggPathwayListDisplayProps> = ({ pathway
 
         setPathwayId(pathway.pathway_id);
 
-        if (setPathwayName) setPathwayName(pathway.pathway_name); // Guarda el nombre también
+        if (setPathwayName) setPathwayName(pathway.pathway_name); // Guarda el nombre 
     };
 
     if (!pathways || pathways.length === 0) {
