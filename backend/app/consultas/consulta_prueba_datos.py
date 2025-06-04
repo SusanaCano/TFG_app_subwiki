@@ -23,8 +23,8 @@ async def obtener_datos():
         # Obtener la colección UniProt
         collection = db["UniProt"]
         
-        # Obtener los primeros 10 documentos de la colección UniProt
-        datos = await collection.find().limit(2).to_list(length=10)
+        # Obtener los primeros 5 documentos de la colección UniProt
+        datos = await collection.find().limit(2).to_list(length=5)
         if not datos:
             print("No se encontraron datos en la colección UniProt")
         else:

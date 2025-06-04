@@ -1,88 +1,78 @@
 # backend/app/routers/router_uniprot.py
 
-'''
-# Este módulo define un APIRouter de FastAPI para gestionar las funcionalidades
-# relacionadas con datos de UniProt. Proporciona endpoints para:
-#
-# 1.  Obtener una proteína específica por su ID:
-#     - Endpoint: `GET /uniprot/{protein_id}`
-#     - Llama a `get_protein_by_id` para la lógica de base de datos.
-#     - Utiliza `ProteinResponse` como modelo de respuesta.
-#
-# 2.  Obtener proteínas basadas en un valor de "locus name":
-#     - Endpoint: `GET /uniprot/proteins/by-locus/{locus_value}`
-#     - Llama a `get_proteins_by_locus_name`.
-#
-# 3.  Realizar una búsqueda general de proteínas utilizando un término de consulta:
-#     - Endpoint: `GET /uniprot/buscar`
-#     - Llama a `obtener_resultados` (de `app.consultas.consulta2`).
-#     - Utiliza `List[QueryResponse]` como modelo de respuesta.
-#
-# Todas las rutas definidas aquí están bajo el prefijo `/uniprot`.
-# El módulo implementa manejo de errores con `HTTPException` para casos como
-# "no encontrado" (404) o errores internos (500), e incorpora logging
-# para registrar eventos relevantes.
-'''
+"""
+Este módulo define un APIRouter de FastAPI para gestionar las funcionalidades
+relacionadas con datos de UniProt. Proporciona endpoints para:
 
-from fastapi import APIRouter, HTTPException, Depends
-from app.features.uniprot.schemas_uniprot import ProteinResponse
-from app.features.uniprot.models_uniprot import get_protein_by_id
-from app.features.uniprot.models_uniprot import get_proteins_by_locus_name
-from app.consultas.consulta2 import obtener_resultados
-from app.models.models_data_mongo import QueryResponse 
+ Buscar proteínas en UniProt (con paginación):
+    - Endpoint: GET /uniprot/buscar
+    - Parámetros de consulta:
+        - `query` (str, obligatorio): El término a buscar.
+        - `page_num` (int, opcional, por defecto: 1): Número de página deseado.
+        - `page_size` (int, opcional, por defecto: 10): Cantidad de resultados por página.
+    - Lógica principal: Llama a `obtener_resultados_tabla` (de
+      `app.consultas.consulta_uniprot_tabla`) para obtener la lista completa
+      de coincidencias y luego aplica paginación internamente.
+    - Modelo de respuesta: `Page[QueryResponse]`. Devuelve un objeto que incluye
+      la lista de resultados para la página (`result`), el total de ítems
+      encontrados (`total`), el número de página actual (`page`) y el tamaño
+      de página (`size`).
+      
+      
+"""
+
+from fastapi import APIRouter, HTTPException 
 from typing import List
+from app.models.models_data_mongo import QueryResponse 
+from app.models.models_page_consultas import Page
+from app.consultas.consulta_uniprot_tabla import obtener_resultados_tabla 
+from app.models.models_page_consultas import Page
 import logging
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/uniprot")
+router = APIRouter(
+    prefix="/uniprot",
+    tags=["UniProt"] 
+)
 
-@router.get("/{protein_id}", response_model=ProteinResponse)
-async def get_protein(protein_id: str):
-    """Busca una proteína en MongoDB por su ID"""
-    protein = await get_protein_by_id(protein_id)
+@router.get("/buscar", response_model=Page[QueryResponse])
+async def search_uniprot_data(query: str, page_num: int = 1, page_size: int = 10):
+    """
+    Busca proteínas en la base de datos UniProt utilizando un término de consulta.
+    Esta ruta utiliza la función `obtener_resultados_tabla`.
+    """
+    logger.info(f"Router: Solicitud a /uniprot/buscar con query='{query}'")
     
-    if not protein:
-        raise HTTPException(status_code=404, detail="Proteína no encontrada")
-    
-    return protein
-
-@router.get("/proteins/by-locus/{locus_value}")
-async def get_proteins_by_locus(locus_value: str):
-    proteins = await get_proteins_by_locus_name(locus_value)
-    if not proteins:
-        raise HTTPException(status_code=404, detail="No se encontraron proteínas")
-    return proteins
-
-'''
-@router.get("/buscar", response_model=List[QueryResponse])
-async def buscar(query: str):
-    # Aquí debes realizar la consulta utilizando el 'query' recibido
-    # Puedes usar la lógica de búsqueda que ya has creado
-    #resultados = await obtener_resultados(query)  # O la función que use para obtener datos
-    resultados = obtener_resultados(query)
-
-    if not resultados:
-        raise HTTPException(status_code=404, detail="No se encontraron resultados")
-    
-    #return {"resultados": resultados}
-    #return [QueryResponse(**dato) for dato in resultados]
-        return [
-        {"id": "P12345", "name": "Test Protein", "function": "Test Func", "organism": "Homo sapiens"}
-    ]
-'''
-
-@router.get("/buscar", response_model=List[QueryResponse])
-async def buscar(query: str):
     try:
-        resultados = await obtener_resultados(query)
+
+        todos_los_resultados: List[QueryResponse] = await obtener_resultados_tabla(query)
+        
+        total_items: int = len(todos_los_resultados)
+        
+        # Lógica de paginación 
+        start_index = (page_num - 1) * page_size
+        end_index = start_index + page_size
+        resultados_paginados: List[QueryResponse] = todos_los_resultados[start_index:end_index]
+        
+        logger.info(f"Router: Devolviendo {len(resultados_paginados)} de {total_items} resultados para query='{query}' (página {page_num}, tamaño {page_size}).")
+        
+       
+        return {
+            "result": resultados_paginados,  # La lista de ítems para la página actual
+            "total": total_items,            # El número total de ítems
+            "page": page_num,                # El número de página actual
+            "size": page_size                # El tamaño de la página
+        }
+        
+    except HTTPException as http_exc:
+        logger.info(f"Router: Propagando HTTPException desde /uniprot/buscar: Status={http_exc.status_code}, Detail='{http_exc.detail}' para query='{query}'")
+        raise http_exc
+
+    except ValueError as ve: 
+        logger.error(f"Router: Error de validación (ValueError) en /uniprot/buscar con query='{query}': {str(ve)}", exc_info=True)
+        raise HTTPException(status_code=400, detail=str(ve))
+
     except Exception as e:
-        import traceback
-        traceback.print_exc()
-        raise HTTPException(status_code=500, detail=f"Error interno: {str(e)}")
-    
-    if not resultados:
-        logger.warning("No se encontraron documentos que coincidan con la consulta.")
-        raise HTTPException(status_code=404, detail="No se encontraron resultados")
-    
-    return resultados
+        logger.error(f"Router: Error INESPERADO en /uniprot/buscar con query='{query}': {type(e).__name__} - {str(e)}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Error interno del servidor al procesar la búsqueda.")
