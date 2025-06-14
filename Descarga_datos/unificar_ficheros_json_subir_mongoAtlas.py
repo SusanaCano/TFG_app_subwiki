@@ -66,9 +66,9 @@ def save_to_mongoDB_atlas(json_directory, collection_name):
                 # Insertar datos en MongoDB
             if data:
                 result = collection.insert_many(data)
-                print(f"✔️  Insertados {len(result.inserted_ids)} documentos desde {filename}")
+                print(f"Insertados {len(result.inserted_ids)} documentos desde {filename}")
             else:
-                print(f"⚠️  El archivo {filename} está vacío.")
+                print(f"El archivo {filename} está vacío.")
             
         except Exception as e:
             print(f"Error al procesar el archivo {filename}: {e}")

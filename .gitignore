@@ -1,5 +1,6 @@
+
 # Node.js (Frontend)
-frontend/node_modules
+frontend/node_modules/
 frontend/.next
 frontend/.env.local
 frontend/.npm
@@ -37,3 +38,7 @@ mongoDB/.env
 # Archivos de logs de build
 build_log_no_slint_config.txt
 build_log.txt
+
+# Claves SSH o archivos sensibles locales
+Australia_1
+Australia_1.pub
