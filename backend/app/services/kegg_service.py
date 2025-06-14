@@ -28,15 +28,14 @@
 # KGML parseado.
 #
 # En general, este servicio tiene como objetivo abstraer y proporcionar información
-# procesada de rutas KEGG para su uso en otras partes de la aplicación, como
-# endpoints de API o componentes de visualización de datos.
+# procesada de rutas KEGG para su uso en otras partes de la aplicación, como componentes de visualización de datos.
 '''
 
-from app.config.db import db  # Asegúrate de que tienes una conexión con tu base de datos
+from app.config.db import db 
 from motor.motor_asyncio import AsyncIOMotorDatabase
 import re
 import xml.etree.ElementTree as ET
-from typing import Dict, List, TypedDict # Para type hinting
+from typing import Dict, List, TypedDict 
 
 # Tipos para el parser KGML
 class KgmlNode(TypedDict):
@@ -75,9 +74,8 @@ async def obtener_ruta_metabolica(entry: str, db_motor: AsyncIOMotorDatabase):
         regex = re.compile(f"^{entrada_normalizada}$", re.IGNORECASE)
         
          # Buscar la ruta metabólica por el genId de forma asincrónica
-        #ruta_metabolica = await collection.find_one({"entry": entry})  # 'await' para consultas asincrónicas
 
-        # Haz que MongoDB normalice también el campo 'entry' en la misma forma
+        # MongoDB normalice también el campo 'entry' en la misma forma
         ruta_metabolica = await collection.find_one({
             "$expr": {
                 "$regexMatch": {
@@ -144,7 +142,7 @@ def parse_kgml_to_graph(kgml_string: str, pathway_map_id: str) -> ParsedKgmlGrap
             
             try:
                 x_str, y_str = graphics.get("x"), graphics.get("y")
-                # Asegurarse de que sean números válidos antes de convertir
+               
                 x = int(x_str) if x_str and x_str.strip().lstrip('-').isdigit() else None
                 y = int(y_str) if y_str and y_str.strip().lstrip('-').isdigit() else None
             except (ValueError, TypeError):
