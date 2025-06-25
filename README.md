@@ -19,7 +19,7 @@ CereWiki es una aplicación web intuitiva para la búsqueda de genes del microor
 
 
  ![Vista Previa de CereWiki](CereWiki_imagen.JPG)
-(Próximamente)
+
 
 ## Tecnologías Utilizadas
 
